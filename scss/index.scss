@@ -1,0 +1,538 @@
+@mixin desktop {
+	@media (min-width: 576px) {
+		@content;
+	}
+}
+
+@mixin mobile {
+	@media (max-width: 576px) {
+		@content;
+	}
+}
+
+@mixin desktop-only {
+	display: none;
+	@include desktop {
+		display: block;
+	}
+}
+
+@mixin mobile-only {
+	display: block;
+	@include desktop {
+		display: none;
+	}
+}
+body {
+	font-family: "Chiron Sung HK WS"; /* 留意字體名稱 */
+	font-weight: 250; /* 250 至 900 之間的任一數值 */
+	font-style: normal; /* normal （正體）或 italic（斜體） */
+	font-variation-settings: "PADG" 4; /* 0 至 10 之間的任一數值 */
+}
+
+$ITEMS-PER-PAGE: 11;
+$TRANSITION: 1s;
+$PRE-SCALE: 0.8;
+$PRE-POS: 150%;
+
+html {
+	height: 100vh;
+}
+div {
+	box-sizing: border-box;
+}
+body,
+#app {
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	background-image: url("../../img/background/black.jpg");
+	background-size: cover;
+}
+
+#app {
+	display: flex;
+	overflow: hidden;
+	@include mobile() {
+		flex-direction: row-reverse;
+	}
+	@include desktop() {
+		flex-direction: column;
+	}
+}
+
+#content {
+	flex: 1 0 auto;
+	.title {
+		position: fixed;
+		@include desktop() {
+			top: 15%;
+			left: 0;
+			right: 0;
+			width: calc(100% * 2 / 9);
+		}
+		@include mobile() {
+			top: 0;
+			bottom: 0;
+			height: fit-content;
+			left: 30%;
+			right: 30%;
+		}
+		margin: auto;
+		border-bottom: 2px solid #806b5b;
+		color: #fff;
+		text-align: center;
+		font-size: 2rem;
+		display: flex;
+		justify-content: center;
+		> div.animation {
+			animation: flip-x $TRANSITION;
+		}
+
+		> div {
+			white-space: nowrap;
+		}
+	}
+
+	.bar {
+		&.animation {
+			animation: flip-y $TRANSITION;
+		}
+		border: 1px solid #806b5b;
+		height: 0;
+		position: fixed;
+		&::after {
+			display: block;
+			position: absolute;
+			width: 0.5rem;
+			height: 0.5rem;
+			border: 2px solid #806b5b;
+			background-color: #2c231d;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			margin: auto;
+			content: " ";
+			transform: rotate(45deg);
+		}
+		@include desktop() {
+			width: calc(100% * 2 / 9);
+			&.bar-1,
+			&.bar-3 {
+				top: 30%;
+			}
+
+			&.bar-2,
+			&.bar-4 {
+				bottom: 30%;
+			}
+
+			&.bar-1,
+			&.bar-2 {
+				left: calc(100% / 9);
+			}
+			&.bar-3,
+			&.bar-4 {
+				right: calc(100% / 9);
+			}
+		}
+		@include mobile() {
+			&.bar-1 {
+				top: 5%;
+			}
+			&.bar-2 {
+				bottom: 5%;
+			}
+
+			left: 20%;
+			right: 20%;
+		}
+
+		&.bar-3,
+		&.bar-4 {
+			@include mobile() {
+				display: none;
+			}
+		}
+	}
+
+	.img-box,
+	.textbox {
+		position: fixed;
+		@include desktop() {
+			top: 32.5%;
+			bottom: 32.5%;
+			width: calc(100% * 2 / 9);
+			height: 35vh;
+		}
+
+		@include mobile() {
+			left: 20%;
+			right: 20%;
+		}
+	}
+	.img-box {
+		background-color: #fff;
+		@include desktop() {
+			left: calc(100vw / 9);
+		}
+		@include mobile() {
+			top: 10%;
+			left: 20%;
+			right: 20%;
+			height: 60vw;
+		}
+	}
+	.img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		&.show {
+			opacity: 1;
+		}
+		transition: opacity $TRANSITION;
+	}
+
+	.textbox {
+		background-color: transparent;
+		resize: none;
+		color: #fff;
+		border: none;
+		padding: 1rem 0;
+		line-height: 1.5;
+		@include desktop() {
+			right: calc(100vw / 9);
+		}
+		@include mobile() {
+			text-align: center;
+			top: 55%;
+			bottom: 20%;
+			left: 20%;
+			right: 20%;
+		}
+		&.animation {
+			animation: flash $TRANSITION;
+		}
+	}
+}
+
+#scrollbar {
+	flex: 0 0 20%;
+	position: relative;
+
+	.year {
+		width: fit-content;
+		height: fit-content;
+		position: fixed;
+		text-align: center;
+		font-weight: bold;
+		color: #fff;
+		margin: auto;
+		z-index: 100;
+		@include desktop() {
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			font-size: 5rem;
+		}
+		@include mobile() {
+			top: 47%;
+			left: 0;
+			width: 20%;
+			font-size: 2rem;
+		}
+		.number {
+			position: relative;
+			display: inline-block;
+			margin: 0;
+			opacity: 0;
+			animation: fade-in $TRANSITION forwards;
+		}
+		.number span {
+			position: absolute;
+			left: 0;
+			top: 0;
+			opacity: 1;
+			animation: fade-out $TRANSITION forwards;
+		}
+	}
+
+	.yonglong {
+		position: fixed;
+		width: fit-content;
+		height: fit-content;
+		color: #fff;
+		z-index: 100;
+		@include desktop() {
+			top: 55%;
+			left: 0;
+			right: 0;
+			margin: auto;
+			font-size: 1.5rem;
+		}
+		@include mobile() {
+			top: 51.5%;
+			left: 0;
+			right: 80%;
+			font-size: 0.3rem;
+			margin: auto;
+		}
+		&.animation {
+			animation: flip-x $TRANSITION;
+		}
+	}
+
+	.bar {
+		position: absolute;
+		border: 1px solid #806b5b;
+		@include mobile() {
+			top: 0;
+			bottom: 0;
+			width: 0;
+			left: 0;
+			right: 0;
+		}
+		@include desktop {
+			top: 25%;
+			left: 0;
+			right: 0;
+			height: 0;
+		}
+		margin: auto;
+	}
+
+	.items {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		@include desktop() {
+			transition: right $TRANSITION;
+		}
+		@include mobile() {
+			transition: bottom $TRANSITION;
+		}
+	}
+
+	.subject {
+		position: relative;
+		cursor: pointer;
+		@include desktop() {
+			height: 100%;
+			width: calc(100% * 8 / 9 / 18);
+			display: inline-block;
+			&.active {
+				width: calc(100% / 9);
+			}
+		}
+		@include mobile() {
+			width: 100%;
+			height: calc(100% / 13);
+			&.active {
+				height: calc(100% / 9);
+			}
+		}
+		&.active {
+			.square {
+				@include desktop() {
+					transform: translateY(calc(-50vh + 25% - 0.5rem + 3.75rem)) rotate(45deg);
+					width: 7.5rem;
+					height: 7.5rem;
+				}
+				@include mobile() {
+					width: 3rem;
+					height: 3rem;
+				}
+			}
+
+			.title {
+				display: none;
+			}
+
+			.time {
+				font-size: 1.25rem;
+				line-height: 1.25rem;
+				@include mobile() {
+					display: none;
+				}
+			}
+		}
+		.square {
+			@include desktop() {
+				top: calc(25% - 0.5rem);
+				left: 0;
+				right: 0;
+				width: 1rem;
+				height: 1rem;
+			}
+			@include mobile() {
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				width: 1rem;
+				height: 1rem;
+			}
+			margin: auto;
+			position: absolute;
+			border: 2px solid #806b5b;
+			background-color: #2c231d;
+			transform: rotate(45deg);
+			transition: width $TRANSITION, height $TRANSITION, transform $TRANSITION;
+		}
+
+		.time {
+			position: absolute;
+			margin: auto;
+			color: #fff;
+			opacity: 1;
+			transition: opacity $TRANSITION;
+			@include desktop() {
+				top: 35%;
+				left: 0;
+				right: 0;
+				width: fit-content;
+			}
+			@include mobile() {
+				height: fit-content;
+				font-size: 0.3rem;
+				top: 0;
+				bottom: 0;
+				left: 0.3rem;
+			}
+		}
+		@include desktop() {
+			&:hover {
+				.title {
+					opacity: 1;
+				}
+			}
+		}
+		.title {
+			color: #fff;
+			opacity: 0;
+			position: absolute;
+			width: 100%;
+			border-top: 2px solid #806b5b;
+			border-bottom: 2px solid #806b5b;
+			transition: opacity $TRANSITION;
+			z-index: -1;
+			white-space: nowrap;
+			display: flex;
+			justify-content: center;
+		}
+
+		@include desktop() {
+			&.active {
+				.v-bar {
+					top: calc(-50vh + 25% - 0.5rem + 7.5rem);
+				}
+			}
+		}
+		.v-bar {
+			border: 1px solid #806b5b;
+			width: 0;
+			position: absolute;
+			bottom: 75%;
+			top: 25%;
+			left: 0;
+			right: 0;
+			margin: auto;
+			transition: top $TRANSITION;
+			z-index: -1;
+			@include desktop-only();
+		}
+
+		.h-bar {
+			position: absolute;
+			width: 100%;
+			opacity: 0;
+			top: 15%;
+			bottom: 0;
+			margin: auto;
+			height: 100%;
+			transition: opacity $TRANSITION;
+			&::before,
+			&::after {
+				position: absolute;
+				content: " ";
+				top: 0;
+				bottom: 0;
+				height: 0;
+				border: 1px solid #806b5b;
+				width: 25%;
+				margin: auto;
+			}
+			&::before {
+				left: -50%;
+			}
+			&::after {
+				right: -50%;
+			}
+		}
+		&.active .h-bar {
+			opacity: 1;
+		}
+	}
+}
+@keyframes fade-in {
+	from {
+		transform: translateY(3rem);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+@keyframes fade-out {
+	from {
+		transform: translateY(0);
+		opacity: 1;
+	}
+	to {
+		transform: translateY(-3rem);
+		opacity: 0;
+	}
+}
+@keyframes flip-x {
+	0% {
+		transform: rotateX(0deg);
+	}
+	50% {
+		transform: rotateX(90deg);
+	}
+	100% {
+		transform: rotateX(0deg);
+	}
+}
+
+@keyframes flip-y {
+	0% {
+		transform: rotateY(0deg);
+	}
+	50% {
+		transform: rotateY(90deg);
+	}
+	100% {
+		transform: rotateY(0deg);
+	}
+}
+
+@keyframes flash {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}

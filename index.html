@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<link rel="stylesheet" href="dist/style/index.min.css" />
+		<link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/chiron-sung-hk-webfont@1.0.7/css/vf.min.css" />
+	</head>
+	<body>
+		<div id="app">
+			<div id="content">
+				<div class="title">
+					<div :class="{animation: animation}">{{title}}</div>
+				</div>
+				<div class="bar bar-1" :class="{animation: animation}"></div>
+				<div class="bar bar-2" :class="{animation: animation}"></div>
+				<div class="bar bar-3" :class="{animation: animation}"></div>
+				<div class="bar bar-4" :class="{animation: animation}"></div>
+				<div class="img-box">
+					<img :src="'img/img/' + sub.img" v-for="(sub, s) in list" class="img" :class="{show: s == activeIndex}" />
+				</div>
+				<textarea class="textbox" :class="{animation: animation}" disabled>{{description}}</textarea>
+			</div>
+			<div id="scrollbar">
+				<div class="year" ref="title-year">
+					<span class="number">2</span>
+					<span class="number">0</span>
+					<span class="number">2</span>
+					<span class="number">3</span>
+				</div>
+				<div class="yonglong" :class="{animation: animation}">YONGLONG</div>
+				<div class="bar"></div>
+				<div class="items" :style="scrollPos">
+					<div class="subject" v-for="(sub, s) in list" :class="{active: s == activeIndex}" @click="setItem(s)">
+						<div class="square"></div>
+						<div class="title">
+							<span>{{sub.title}}</span>
+						</div>
+						<div class="time">
+							{{sub.year}}
+							<div class="h-bar"></div>
+						</div>
+						<div class="v-bar"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/index.js"></script>
+</html>
